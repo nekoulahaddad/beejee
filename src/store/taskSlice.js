@@ -102,7 +102,7 @@ const taskSlice = createSlice({
         },
         [login.fulfilled]: (state, action) => {
             state.status = "resolved";
-            localStorage.setItem("token", JSON.stringify(action.payload.token));
+            localStorage.setItem("token", action.payload.token);
         },
         [login.rejected]: (state, action) => {},
         [editTask.pending]: (state, action) => {
