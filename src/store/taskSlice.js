@@ -23,7 +23,7 @@ export const addTask = createAsyncThunk(
         bodyFormData.append("email", email);
         bodyFormData.append("text", text);
         const response = await apiCall.post(endpoints.createTask, bodyFormData);
-        return response.data.message;
+        return response.data;
     }
 );
 
@@ -35,16 +35,11 @@ export const editTask = createAsyncThunk(
         bodyFormData.append("text", text);
         bodyFormData.append("status", status);
         bodyFormData.append("token", token);
-        /*        let config = {
-            params: {
-                token: token,
-            },
-        };*/
         const response = await apiCall.post(
             endpoints.editTask(id),
             bodyFormData
         );
-        return response.data.message;
+        return response.data;
     }
 );
 
@@ -90,12 +85,19 @@ const taskSlice = createSlice({
         },
         [addTask.fulfilled]: (state, action) => {
             state.status = "resolved";
-            state.tasks.push(action.payload);
+            if (action.payload.status === "ok") {
+                state.error = null;
+                state.tasks.push(action.payload.message);
+            } else {
+                state.error = action.payload.message;
+            }
             state.numberOfPages = Math.ceil(
                 (action.payload.total_task_count + 1) / 3
             );
         },
-        [addTask.rejected]: (state, action) => {},
+        [addTask.rejected]: (state, action) => {
+            state.error = action.payload;
+        },
         [login.pending]: (state, action) => {
             state.status = "pending";
             state.error = null;
@@ -111,7 +113,12 @@ const taskSlice = createSlice({
         },
         [editTask.fulfilled]: (state, action) => {
             state.status = "resolved";
-            console.log(action.payload);
+            if (action.payload.status === "ok") {
+                state.error = null;
+                alert("задача отредактировано успешно");
+            } else {
+                state.error = action.payload.message;
+            }
         },
         [editTask.rejected]: (state, action) => {},
     },

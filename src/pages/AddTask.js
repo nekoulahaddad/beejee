@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../store/taskSlice";
 
 function AddTask() {
@@ -11,12 +11,12 @@ function AddTask() {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [text, setText] = useState("");
+  const { error } = useSelector((state) => state.tasks);
 
   const handleAddTask = (e) => {
     e.preventDefault();
-
-    if (username && email && text) {
-      dispatch(addTask({ username, email, text }));
+    dispatch(addTask({ username, email, text }));
+    if (!error) {
       setUserName("");
       setEmail("");
       setText("");
@@ -34,6 +34,9 @@ function AddTask() {
             type="text"
             placeholder="John Doe"
           />
+          {error && error.username && (
+            <Form.Text className="text-muted">{error.username}</Form.Text>
+          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>е-mail</Form.Label>
@@ -43,6 +46,9 @@ function AddTask() {
             type="email"
             placeholder="example@gmail.com"
           />
+          {error && error.email && (
+            <Form.Text className="text-muted">{error.email}</Form.Text>
+          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>текст задачи</Form.Label>
@@ -52,6 +58,9 @@ function AddTask() {
             type="text"
             placeholder="изучать react"
           />
+          {error && error.text && (
+            <Form.Text className="text-muted">{error.text}</Form.Text>
+          )}
         </Form.Group>
         <Button onClick={handleAddTask} variant="primary" type="submit">
           Добавить

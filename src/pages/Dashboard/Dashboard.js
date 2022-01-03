@@ -47,8 +47,8 @@ function Dashboard() {
           <div className="tableContainer">
             <table id="table" className="table item-list">
               <tr>
-                {headers.map((header) => (
-                  <th className="table_labels">
+                {headers.map((header, i) => (
+                  <th key={i} className="table_labels">
                     {header[0] === "имя пользователя" ||
                     header[0] === "е-mail" ||
                     header[0] === "статус" ? (
@@ -85,7 +85,7 @@ function Dashboard() {
                 ))}
               </tr>
               {tasks?.map((task) => (
-                <tr>
+                <tr key={task.id}>
                   <th>
                     {task.status === 1 || task.status === 11 ? (
                       <div>да</div>

@@ -11,15 +11,13 @@ function EditTask() {
   const [status, setStatus] = useState("");
   const [text, setText] = useState("");
   let { id } = useParams();
-  const { tasks } = useSelector((state) => state.tasks);
+  const { error, tasks } = useSelector((state) => state.tasks);
   let selectedTask = tasks.filter((task) => task.id == id);
   selectedTask = selectedTask[0];
 
   const handleEditTask = (e) => {
     e.preventDefault();
-    if (status && text) {
-      dispatch(editTask({ id, text, status }));
-    }
+    dispatch(editTask({ id, text, status }));
   };
 
   useEffect(() => {
@@ -47,6 +45,9 @@ function EditTask() {
               defaultValue={status}
               type="text"
             />
+            {error && error.token && (
+              <Form.Text className="text-muted">{error.token}</Form.Text>
+            )}
           </Form.Group>
           <Button onClick={handleEditTask} variant="primary" type="submit">
             Редактировать
