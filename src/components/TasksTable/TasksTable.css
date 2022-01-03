@@ -1,0 +1,75 @@
+.tableContainer {
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #313131;
+}
+th {
+  padding: 1em;
+  border: 1px solid #313131;
+  color: #bfbfbf;
+  background-color: #424242;
+  font-weight: normal;
+}
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+.button_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.page-title {
+  padding-top: 30px;
+  padding-bottom: 10px;
+  color: #ffffff;
+  text-align: center;
+}
+.edit {
+  stroke: #bfbfbf;
+}
+.edit:hover {
+  stroke: #53cbf1;
+}
+.trash:hover {
+  stroke: #ca4c4c;
+}
+.addItemButton {
+  color: #313131;
+  margin: 20px;
+  border: 1px solid #313131;
+  width: 50vw;
+  height: 6vh;
+  border-radius: 20px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.addItemButton:hover {
+  color: #ffffff;
+  background-color: #313131;
+}
+.table_labels {
+  color: #ffffff;
+  font-weight: bold;
+}
+.color_box {
+  pointer-events: none;
+  margin: auto;
+  width: 10vh;
+  height: 10vh;
+}
+.directionIcon {
+  margin-right: 5px;
+  fill: white;
+}
