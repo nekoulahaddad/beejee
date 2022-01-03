@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import "./TasksTable.css";
-import { ReactComponent as EditIcon } from "./edit.svg";
-import { ReactComponent as UpIcon } from "./up.svg";
-import { ReactComponent as DownIcon } from "./down.svg";
+import "./Dashboard.css";
+import { ReactComponent as EditIcon } from "../../components/svg/edit.svg";
+import { ReactComponent as UpIcon } from "../../components/svg/up.svg";
+import { ReactComponent as DownIcon } from "../../components/svg/down.svg";
 import { fetchTasks, login } from "../../store/taskSlice";
 import { useDispatch, useSelector } from "react-redux";
-import TaskPagination from "../TaskPagination";
+import TaskPagination from "../../components/TaskPagination";
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
-function TasksTable() {
+function Dashboard() {
   const dispatch = useDispatch();
   const { tasks } = useSelector((state) => state.tasks);
   const [page, setPage] = useState(1);
@@ -129,4 +129,4 @@ function TasksTable() {
   );
 }
 
-export default TasksTable;
+export default Dashboard;
