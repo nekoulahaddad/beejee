@@ -37,13 +37,6 @@ function EditTask() {
     }
   }, [selectedTask]);
 
-  useEffect(() => {
-    if (selectedTask) {
-      setStatus(selectedTask.status);
-      setText(selectedTask.text);
-    }
-  }, [selectedTask]);
-
   return (
     <Container className="mt-3">
       {selectedTask ? (
