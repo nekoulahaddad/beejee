@@ -29,11 +29,11 @@ export const addTask = createAsyncThunk(
 
 export const editTask = createAsyncThunk(
     "tasks/editTask",
-    async function ({ id, text, status }) {
+    async function ({ id, text, newStatus }) {
         let token = localStorage.getItem("token");
         let bodyFormData = new FormData();
         bodyFormData.append("text", text);
-        bodyFormData.append("status", status);
+        bodyFormData.append("status", newStatus);
         bodyFormData.append("token", token);
         const response = await apiCall.post(
             endpoints.editTask(id),
@@ -94,6 +94,7 @@ const taskSlice = createSlice({
             if (action.payload.status === "ok") {
                 state.error = null;
                 state.tasks.push(action.payload.message);
+                alert("задача добавлено успешно");
             } else {
                 state.error = action.payload.message;
             }
