@@ -3,7 +3,7 @@ import "./Dashboard.css";
 import { ReactComponent as EditIcon } from "../../components/svg/edit.svg";
 import { ReactComponent as UpIcon } from "../../components/svg/up.svg";
 import { ReactComponent as DownIcon } from "../../components/svg/down.svg";
-import { fetchTasks, login } from "../../store/taskSlice";
+import { fetchTasks, logout } from "../../store/taskSlice";
 import { useDispatch, useSelector } from "react-redux";
 import TaskPagination from "../../components/TaskPagination";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import Container from "react-bootstrap/Container";
 
 function Dashboard() {
   const dispatch = useDispatch();
-  const { tasks } = useSelector((state) => state.tasks);
+  const { tasks, loggedIn, status } = useSelector((state) => state.tasks);
   const [page, setPage] = useState(1);
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("desc");
@@ -25,8 +25,8 @@ function Dashboard() {
     ["Изменить", "edit"],
   ];
 
-  const handleLogin = () => {
-    dispatch(login());
+  const handleLogout = () => {
+    dispatch(logout());
   };
   useEffect(() => {
     dispatch(fetchTasks({ page, sortField, sortDirection }));
@@ -34,16 +34,24 @@ function Dashboard() {
 
   return (
     <Container className="mt-3">
-      {tasks ? (
+      {status == "resolved" ? (
         <React.Fragment>
-          <div className="button_container">
-            <button
-              onClick={handleLogin}
-              className="color-picker-add-item addItemButton"
-            >
-              Логин
-            </button>
-          </div>
+          {!loggedIn ? (
+            <div className="button_container">
+              <Link className="color-picker-add-item addItemButton" to="/login">
+                Логин
+              </Link>
+            </div>
+          ) : (
+            <div className="button_container">
+              <button
+                onClick={handleLogout}
+                className="color-picker-add-item addItemButton"
+              >
+                Выйти
+              </button>
+            </div>
+          )}
           <div className="tableContainer">
             <table id="table" className="table item-list">
               <tr>

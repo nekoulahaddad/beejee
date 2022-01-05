@@ -43,13 +43,16 @@ export const editTask = createAsyncThunk(
     }
 );
 
-export const login = createAsyncThunk("tasks/login", async function () {
-    let bodyFormData = new FormData();
-    bodyFormData.append("username", "admin");
-    bodyFormData.append("password", "123");
-    const response = await apiCall.post(endpoints.login, bodyFormData);
-    return response.data.message;
-});
+export const login = createAsyncThunk(
+    "tasks/login",
+    async function ({ username, password }) {
+        let bodyFormData = new FormData();
+        bodyFormData.append("username", username);
+        bodyFormData.append("password", password);
+        const response = await apiCall.post(endpoints.login, bodyFormData);
+        return response.data;
+    }
+);
 
 const taskSlice = createSlice({
     name: "tasks",
@@ -57,13 +60,16 @@ const taskSlice = createSlice({
         tasks: [],
         status: null,
         error: null,
+        loggedIn: false,
     },
     reducers: {
-        toggleComplete(state, action) {
-            const toggledTodo = state.tasks.find(
-                (todo) => todo.id === action.payload.id
-            );
-            toggledTodo.completed = !toggledTodo.completed;
+        checkAuthentication(state, action) {
+            let token = localStorage.getItem("token");
+            token ? (state.loggedIn: true) : (state.loggedIn: false);
+        },
+        logout(state, action) {
+            localStorage.removeItem("token");
+            state.loggedIn = false;
         },
     },
     extraReducers: {
@@ -103,8 +109,13 @@ const taskSlice = createSlice({
             state.error = null;
         },
         [login.fulfilled]: (state, action) => {
-            state.status = "resolved";
-            localStorage.setItem("token", action.payload.token);
+            if (action.payload.status === "ok") {
+                state.status = "resolved";
+                state.loggedIn = true;
+                localStorage.setItem("token", action.payload.message.token);
+            } else {
+                state.error = action.payload.message;
+            }
         },
         [login.rejected]: (state, action) => {},
         [editTask.pending]: (state, action) => {
@@ -124,6 +135,6 @@ const taskSlice = createSlice({
     },
 });
 
-export const { toggleComplete } = taskSlice.actions;
+export const { checkAuthentication, logout } = taskSlice.actions;
 
 export default taskSlice.reducer;
